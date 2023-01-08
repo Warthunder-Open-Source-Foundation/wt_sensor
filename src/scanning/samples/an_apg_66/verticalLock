@@ -1,0 +1,16 @@
+"type": "pyramide",
+"azimuthLimits": [
+	-60.0,
+	60.0
+],
+"elevationLimits": [
+	-30.0,
+	30.0
+],
+"period": 1.3,
+"width": 20.0,
+"barHeight": 3.3,
+"barsCount": 3,
+"rowMajor": false,
+"centerElevation": 15.0,
+"indicate": true

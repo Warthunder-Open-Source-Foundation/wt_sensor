@@ -1,0 +1,13 @@
+"type": "cone",
+"azimuthLimits": [
+	-60.0,
+	60.0
+],
+"elevationLimits": [
+	-60.0,
+	60.0
+],
+"period": 0.3,
+"width": 1.75,
+"centerElevation": -3.0,
+"indicate": true

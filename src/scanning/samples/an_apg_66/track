@@ -1,0 +1,9 @@
+"type": "no",
+"azimuthLimits": [
+	-60.0,
+	60.0
+],
+"elevationLimits": [
+	-60.0,
+	60.0
+]

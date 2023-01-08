@@ -1,0 +1,16 @@
+"type": "pyramide",
+"azimuthLimits": [
+	-60.0,
+	60.0
+],
+"elevationLimits": [
+	-30.0,
+	30.0
+],
+"rollStabLimit": 70.0,
+"pitchStabLimit": 30.0,
+"period": 0.35,
+"width": 10.0,
+"barHeight": 2.5,
+"barsCount": 2,
+"rowMajor": true
