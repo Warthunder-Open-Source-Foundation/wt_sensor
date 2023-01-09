@@ -1,6 +1,7 @@
 use std::ops::RangeInclusive;
 
 pub struct Signal {
+	signal_type: SignalType,
 	dynamic_range: RangeInclusive<f64>,
 	ground_clutter: bool,
 	aircraft_as_target: bool,

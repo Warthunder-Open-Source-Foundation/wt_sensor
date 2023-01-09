@@ -18,6 +18,7 @@ pub enum ScanPattern {
 
 pub struct Submode {
 	scan_type: ScanType,
+	scan_name: ScanPattern, // Not sure about this one
 	limits: Limits,
 	roll_stab_limit: Option<f64>, // Stabilizes search on the horizon against roll
 	pitch_stab_limit: Option<f64>, // Stabilizes radar on the horizon against elevation
