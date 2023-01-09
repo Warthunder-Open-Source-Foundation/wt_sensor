@@ -1,6 +1,7 @@
 use crate::scanning::scan_type::ScanType;
 use crate::util::Limits;
 
+#[derive(Debug)]
 pub enum ScanPattern {
 	// Search
 	SearchNarrow,
@@ -16,6 +17,7 @@ pub enum ScanPattern {
 	Track,
 }
 
+#[derive(Debug)]
 pub struct Submode {
 	scan_type: ScanType,
 	scan_name: ScanPattern, // Not sure about this one

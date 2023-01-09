@@ -1,5 +1,6 @@
 use std::ops::RangeInclusive;
 
+#[derive(Debug)]
 pub struct Signal {
 	signal_type: SignalType,
 	dynamic_range: RangeInclusive<f64>,
@@ -15,6 +16,7 @@ pub struct Signal {
 	distance_accuracy: Option<f64>,
 }
 
+#[derive(Debug)]
 pub struct Distance {
 	presents: bool,
 	min_value: f64,
@@ -22,6 +24,7 @@ pub struct Distance {
 	width: f64,
 }
 
+#[derive(Debug)]
 pub struct DopplerSpeed {
 	presents: bool,
 	min_value: f64,
@@ -30,6 +33,7 @@ pub struct DopplerSpeed {
 	width: f64,
 }
 
+#[derive(Debug)]
 pub enum SignalType {
 	PulseSearch,
 	PulseDopplerSearch,

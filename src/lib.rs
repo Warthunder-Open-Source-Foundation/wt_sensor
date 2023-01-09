@@ -2,11 +2,17 @@ mod scanning;
 mod transceiver;
 mod util;
 mod signals;
+mod scoped_range_sets;
 
-use crate::scanning::scan_pattern::{ScanPattern, Submode};
+use std::str::FromStr;
+use wt_blk::error::WTBlkError;
+use wt_blk::WTBlk;
+use crate::scanning::scan_pattern::{Submode};
+use crate::scoped_range_sets::ScopeRangeSets;
 use crate::signals::Signal;
 use crate::transceiver::Transceiver;
 
+#[derive(Debug)]
 pub struct Radar {
 	name: String,
 	show_missile_launch_zone: bool,
@@ -17,7 +23,50 @@ pub struct Radar {
 	//fsms is missing as it is very specific logic for radar interaction
 }
 
-pub struct ScopeRangeSets {
-	common: Vec<f64>,
-	boresight_lock: Vec<f64>,
+impl Radar {
+	pub fn from_str(name: String, blk_str: &str) -> Self {
+		let blk = WTBlk::new(&blk_str).unwrap();
+
+		let show_missile_launch_zone = blk.bool("/showMissileLaunchZone").unwrap();
+
+		let transceivers = {
+			let mut transceivers = vec![];
+
+			let mut push_if_exists = |name| {
+				// 								Yes they misspelled Transceiver's
+				if let Ok(elem) = blk.pointer(&format!("/transivers/{}", name)) {
+					transceivers.push(Transceiver::from_value(&WTBlk::new(&elem.to_string()).unwrap(), name).unwrap());
+				}
+			};
+
+			push_if_exists("pulse");
+			push_if_exists("pulseDoppler");
+
+
+			transceivers
+		};
+
+		Self {
+			name,
+			show_missile_launch_zone,
+			transceivers,
+			scan_patterns: vec![],
+			signals: vec![],
+			scope_range_sets: ScopeRangeSets{ common: vec![], boresight_lock: vec![] },
+		}
+	}
+}
+
+#[cfg(test)]
+mod test {
+	use std::fs;
+	use crate::Radar;
+
+	#[test]
+	fn apg_66() {
+		let file = fs::read_to_string("us_an_apg_66.txt").unwrap();
+		let radar = Radar::from_str("an_apg_66".to_owned(), &file);
+
+		dbg!(radar);
+	}
 }

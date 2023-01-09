@@ -102,9 +102,7 @@ checksum = "84a22b9f218b40614adcb3f4ff08b703773ad44fa9423e4e0d346d5db86e4ebc"
 
 [[package]]
 name = "wt_blk"
-version = "0.0.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b23eb09159a5161c70832029639f9f3f2ba336e4cfbc705315e23008db21092c"
+version = "0.0.3"
 dependencies = [
  "serde",
  "serde_json",
@@ -115,5 +113,6 @@ dependencies = [
 name = "wt_sensor"
 version = "0.0.1"
 dependencies = [
+ "serde_json",
  "wt_blk",
 ]
