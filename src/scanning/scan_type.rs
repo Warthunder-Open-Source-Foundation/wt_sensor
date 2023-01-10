@@ -1,13 +1,13 @@
 use std::str::FromStr;
 
 #[derive(Debug)]
-pub enum ScanType {
+pub enum Pattern {
 	Pyramide,
 	Cone,
 	No, // IDK what this does or means, is related to Track
 }
 
-impl FromStr for ScanType {
+impl FromStr for Pattern {
 	type Err = ();
 
 	fn from_str(s: &str) -> Result<Self, Self::Err> {

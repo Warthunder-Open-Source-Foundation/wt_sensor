@@ -1,6 +1,6 @@
 use std::str::FromStr;
 use wt_blk::WTBlk;
-use crate::scanning::scan_type::ScanType;
+use crate::scanning::scan_type::Pattern;
 use crate::util::Limits;
 
 #[derive(Debug)]
@@ -17,12 +17,12 @@ pub enum SubmodeCategory {
 
 	DesignationLock, // Transfer state from Search to Track?
 
-	Track, // Listed under scan patterns?
+	Track,
 }
 
 #[derive(Debug)]
 pub struct Submode {
-	scan_type: ScanType,
+	pattern: Pattern,
 	category: SubmodeCategory, // Not sure about this one
 	limits: Limits,
 	roll_stab_limit: Option<f64>, // Stabilizes search on the horizon against roll
@@ -44,11 +44,11 @@ impl Submode {
 	pub fn from_value(value: &WTBlk, scan_pattern: &str) -> Option<Self> {
 		let scan_name = SubmodeCategory::from_str(scan_pattern).ok()?;
 
-		let scan_type = ScanType::from_str(value.str("/type").ok()?).ok()?;
+		let scan_type = Pattern::from_str(value.str("/type").ok()?).ok()?;
 
 
 		Some(Self {
-			scan_type,
+			pattern: scan_type,
 			category: SubmodeCategory::SearchNarrow,
 			limits: Limits {
 				azimuth: 0.0..=0.0,
