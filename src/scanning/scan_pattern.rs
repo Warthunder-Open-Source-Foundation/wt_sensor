@@ -1,3 +1,5 @@
+use std::str::FromStr;
+use wt_blk::WTBlk;
 use crate::scanning::scan_type::ScanType;
 use crate::util::Limits;
 
@@ -13,8 +15,9 @@ pub enum ScanPattern {
 	VerticalLock,
 	BoresightLock,
 
-	// Listed under scan patterns?
-	Track,
+	DesignationLock, // Transfer state from Search to Track?
+
+	Track, // Listed under scan patterns?
 }
 
 #[derive(Debug)]
@@ -35,4 +38,49 @@ pub struct Submode {
 	row_major: Option<bool>, // True means horizontal bars, false means vertical bars, (where false means inverting the width and height parameters)
 	center_elevation: Option<f64>, // Offsets entire search on the elevation
 	indicate: Option<bool>, // Probably whether or not to show up on the screen outside of the radar indicator
+}
+
+impl Submode {
+	pub fn from_value(value: &WTBlk, scan_pattern: &str) -> Option<Self> {
+		let scan_name = ScanPattern::from_str(scan_pattern).ok()?;
+
+		let scan_type = ScanType::from_str(value.str("/type").ok()?).ok()?;
+
+
+		Some(Self {
+			scan_type,
+			scan_name: ScanPattern::SearchNarrow,
+			limits: Limits {
+				azimuth: 0.0..=0.0,
+				elevation: 0.0..=0.0,
+			},
+			roll_stab_limit: None,
+			pitch_stab_limit: None,
+			period: 0.0,
+			width: 0.0,
+			bar_height: None,
+			bars_count: None,
+			row_major: None,
+			center_elevation: None,
+			indicate: None,
+		})
+	}
+}
+
+impl FromStr for ScanPattern {
+	type Err = ();
+
+	fn from_str(s: &str) -> Result<Self, Self::Err> {
+		match s {
+			"searchNarrow" => Ok(Self::SearchNarrow),
+			"searchMedium" => Ok(Self::SearchNarrow),
+			"searchWide" => Ok(Self::SearchNarrow),
+			"hudLock" => Ok(Self::SearchNarrow),
+			"verticalLock" => Ok(Self::SearchNarrow),
+			"boresightLock" => Ok(Self::SearchNarrow),
+			"designationLock" => Ok(Self::DesignationLock),
+			"track" => Ok(Self::Track),
+			_ => Err(())
+		}
+	}
 }

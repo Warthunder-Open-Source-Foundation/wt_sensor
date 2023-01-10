@@ -2,8 +2,8 @@ use std::ops::RangeInclusive;
 
 #[derive(Debug)]
 pub struct Limits {
-	azimuth: RangeInclusive<f64>,
-	elevation: RangeInclusive<f64>,
+	pub(crate) azimuth: RangeInclusive<f64>,
+	pub(crate) elevation: RangeInclusive<f64>,
 }
 
 #[derive(Debug)]

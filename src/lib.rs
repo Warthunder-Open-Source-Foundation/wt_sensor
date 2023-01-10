@@ -46,11 +46,33 @@ impl Radar {
 			transceivers
 		};
 
+		let scan_patterns = {
+			let mut scan_patterns = vec![];
+
+			let mut push_if_exists = |name| {
+				// 								Yes they misspelled Transceiver's
+				if let Ok(elem) = blk.pointer(&format!("/scanPatterns/{}", name)) {
+					scan_patterns.push(Submode::from_value(&WTBlk::new(&elem.to_string()).unwrap(), name).unwrap());
+				}
+			};
+
+			push_if_exists("searchNarrow");
+			push_if_exists("searchMedium");
+			push_if_exists("searchWide");
+			push_if_exists("hudLock");
+			push_if_exists("verticalLock");
+			push_if_exists("boresightLock");
+			push_if_exists("designationLock");
+			push_if_exists("track");
+
+			scan_patterns
+		};
+
 		Self {
 			name,
 			show_missile_launch_zone,
 			transceivers,
-			scan_patterns: vec![],
+			scan_patterns,
 			signals: vec![],
 			scope_range_sets: ScopeRangeSets{ common: vec![], boresight_lock: vec![] },
 		}
