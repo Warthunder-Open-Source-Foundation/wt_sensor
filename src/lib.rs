@@ -17,7 +17,7 @@ pub struct Radar {
 	name: String,
 	show_missile_launch_zone: bool,
 	transceivers: Vec<Transceiver>,
-	scan_patterns: Vec<Submode>,
+	submode: Vec<Submode>,
 	signals: Vec<Signal>,
 	scope_range_sets: ScopeRangeSets,
 	//fsms is missing as it is very specific logic for radar interaction
@@ -29,52 +29,39 @@ impl Radar {
 
 		let show_missile_launch_zone = blk.bool("/showMissileLaunchZone").unwrap();
 
-		let transceivers = {
-			let mut transceivers = vec![];
-
-			let mut push_if_exists = |name| {
-				// 								Yes they misspelled Transceiver's
-				if let Ok(elem) = blk.pointer(&format!("/transivers/{}", name)) {
-					transceivers.push(Transceiver::from_value(&WTBlk::new(&elem.to_string()).unwrap(), name).unwrap());
-				}
-			};
-
-			push_if_exists("pulse");
-			push_if_exists("pulseDoppler");
+		let transceivers = [
+			"pulse",
+			"pulseDoppler"
+		].iter().map(|name| {
+			// 								Yes they misspelled Transceiver's
+			let format = format!("/transivers/{}", name);
+			let elem = blk.pointer( &format).unwrap();
+			Transceiver::from_value(&WTBlk::new(&elem.to_string()).unwrap(), name).unwrap()
+		}).collect();
 
 
-			transceivers
-		};
+		let scan_patterns = [
+			"searchNarrow",
+			"searchMedium",
+			"searchWide", "hudLock",
+			"verticalLock", "boresightLock",
+			"designationLock",
+			"track"
+		].iter().map(|name| {
+			let format = format!("/scanPatterns/{}", name);
+			let elem = blk.pointer(&format).unwrap();
+			Submode::from_value(&WTBlk::new(&elem.to_string()).unwrap(), name).unwrap()
+		}
+		).collect();
 
-		let scan_patterns = {
-			let mut scan_patterns = vec![];
-
-			let mut push_if_exists = |name| {
-				// 								Yes they misspelled Transceiver's
-				if let Ok(elem) = blk.pointer(&format!("/scanPatterns/{}", name)) {
-					scan_patterns.push(Submode::from_value(&WTBlk::new(&elem.to_string()).unwrap(), name).unwrap());
-				}
-			};
-
-			push_if_exists("searchNarrow");
-			push_if_exists("searchMedium");
-			push_if_exists("searchWide");
-			push_if_exists("hudLock");
-			push_if_exists("verticalLock");
-			push_if_exists("boresightLock");
-			push_if_exists("designationLock");
-			push_if_exists("track");
-
-			scan_patterns
-		};
 
 		Self {
 			name,
 			show_missile_launch_zone,
 			transceivers,
-			scan_patterns,
+			submode: scan_patterns,
 			signals: vec![],
-			scope_range_sets: ScopeRangeSets{ common: vec![], boresight_lock: vec![] },
+			scope_range_sets: ScopeRangeSets { common: vec![], boresight_lock: vec![] },
 		}
 	}
 }

@@ -27,8 +27,8 @@ pub struct Submode {
 	limits: Limits,
 	roll_stab_limit: Option<f64>, // Stabilizes search on the horizon against roll
 	pitch_stab_limit: Option<f64>, // Stabilizes radar on the horizon against elevation
-	period: f64, // Round trip scan time across any bars including reset
-	width: f64, // Width of scanned area in degrees, from radar normal to one side, meaning the total FOV from the normal is double of this
+	period: Option<f64>, // Round trip scan time across any bars including reset
+	width: Option<f64>, // Width of scanned area in degrees, from radar normal to one side, meaning the total FOV from the normal is double of this
 
 	// Pyramid scanning uses bars to segment, with an amount and dimension
 	// Pyramids appear to start at the lowest elevation in the leftmost scanning offset
@@ -42,27 +42,45 @@ pub struct Submode {
 
 impl Submode {
 	pub fn from_value(value: &WTBlk, scan_pattern: &str) -> Option<Self> {
-		let scan_name = SubmodeCategory::from_str(scan_pattern).ok()?;
+		let category = SubmodeCategory::from_str(scan_pattern).ok()?;
+		let pattern = Pattern::from_str(value.str("/type").ok()?).ok()?;
 
-		let scan_type = Pattern::from_str(value.str("/type").ok()?).ok()?;
+		let limits = Limits {
+			azimuth: {
+				let lhs = value.float("/azimuthLimits/0").ok()?;
+				let rhs= value.float("/azimuthLimits/1").ok()?;
+				lhs..=rhs
+			},
+			elevation: {
+				let lhs = value.float("/elevationLimits/0").ok()?;
+				let rhs= value.float("/elevationLimits/1").ok()?;
+				lhs..=rhs
+			},
+		};
 
+		let roll_stab_limit = value.float("/rollStabLimit").ok();
+		let pitch_stab_limit = value.float("/pitchStabLimit").ok();
+		let period = value.float("/period").ok();
+		let width = value.float("/width").ok();
+		let bar_height = value.float("/barHeight").ok();
+		let bars_count = value.int("/barsCount").ok().map(|x|x as u8);
+		let row_major = value.bool("/rowMajor").ok();
+		let center_elevation = value.float("/centerElevation").ok();
+		let indicate = value.bool("/indicate").ok();
 
 		Some(Self {
-			pattern: scan_type,
-			category: SubmodeCategory::SearchNarrow,
-			limits: Limits {
-				azimuth: 0.0..=0.0,
-				elevation: 0.0..=0.0,
-			},
-			roll_stab_limit: None,
-			pitch_stab_limit: None,
-			period: 0.0,
-			width: 0.0,
-			bar_height: None,
-			bars_count: None,
-			row_major: None,
-			center_elevation: None,
-			indicate: None,
+			pattern,
+			category,
+			limits,
+			roll_stab_limit,
+			pitch_stab_limit,
+			period,
+			width,
+			bar_height,
+			bars_count,
+			row_major,
+			center_elevation,
+			indicate,
 		})
 	}
 }
