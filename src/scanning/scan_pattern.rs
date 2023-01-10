@@ -4,7 +4,7 @@ use crate::scanning::scan_type::ScanType;
 use crate::util::Limits;
 
 #[derive(Debug)]
-pub enum ScanPattern {
+pub enum SubmodeCategory {
 	// Search
 	SearchNarrow,
 	SearchMedium,
@@ -23,7 +23,7 @@ pub enum ScanPattern {
 #[derive(Debug)]
 pub struct Submode {
 	scan_type: ScanType,
-	scan_name: ScanPattern, // Not sure about this one
+	category: SubmodeCategory, // Not sure about this one
 	limits: Limits,
 	roll_stab_limit: Option<f64>, // Stabilizes search on the horizon against roll
 	pitch_stab_limit: Option<f64>, // Stabilizes radar on the horizon against elevation
@@ -42,14 +42,14 @@ pub struct Submode {
 
 impl Submode {
 	pub fn from_value(value: &WTBlk, scan_pattern: &str) -> Option<Self> {
-		let scan_name = ScanPattern::from_str(scan_pattern).ok()?;
+		let scan_name = SubmodeCategory::from_str(scan_pattern).ok()?;
 
 		let scan_type = ScanType::from_str(value.str("/type").ok()?).ok()?;
 
 
 		Some(Self {
 			scan_type,
-			scan_name: ScanPattern::SearchNarrow,
+			category: SubmodeCategory::SearchNarrow,
 			limits: Limits {
 				azimuth: 0.0..=0.0,
 				elevation: 0.0..=0.0,
@@ -67,7 +67,7 @@ impl Submode {
 	}
 }
 
-impl FromStr for ScanPattern {
+impl FromStr for SubmodeCategory {
 	type Err = ();
 
 	fn from_str(s: &str) -> Result<Self, Self::Err> {
