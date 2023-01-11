@@ -1,11 +1,10 @@
-mod scanning;
-mod transceiver;
-mod util;
-mod signals;
-mod scoped_range_sets;
+pub mod scanning;
+pub mod transceiver;
+pub mod util;
+pub mod signals;
+pub mod scoped_range_sets;
 
 use std::str::FromStr;
-use wt_blk::error::WTBlkError;
 use wt_blk::WTBlk;
 use crate::scanning::scan_pattern::{Submode};
 use crate::scoped_range_sets::ScopeRangeSets;
@@ -14,12 +13,12 @@ use crate::transceiver::Transceiver;
 
 #[derive(Debug)]
 pub struct Radar {
-	name: String,
-	show_missile_launch_zone: bool,
-	transceivers: Vec<Transceiver>,
-	submode: Vec<Submode>,
-	signals: Vec<Signal>,
-	scope_range_sets: ScopeRangeSets,
+	pub name: String,
+	pub show_missile_launch_zone: bool,
+	pub transceivers: Vec<Transceiver>,
+	pub submode: Vec<Submode>,
+	pub signals: Vec<Signal>,
+	pub scope_range_sets: ScopeRangeSets,
 	//fsms is missing as it is very specific logic for radar interaction
 }
 
