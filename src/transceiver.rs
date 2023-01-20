@@ -3,8 +3,12 @@ use wt_blk::WTBlk;
 use crate::util::Antenna;
 use serde_json::Value;
 
+#[cfg(feature = "reflect")]
+use bevy_reflect::Reflect;
+
 
 // Name is WIP
+#[cfg_attr(feature = "reflect", derive(bevy_reflect::Reflect, bevy_reflect::FromReflect))]
 #[derive(Debug)]
 pub struct Transceiver {
 	trans_type: TransceiverType,
@@ -55,6 +59,7 @@ impl Transceiver {
 	}
 }
 
+#[cfg_attr(feature = "reflect", derive(bevy_reflect::Reflect, bevy_reflect::FromReflect))]
 #[derive(Debug)]
 pub enum TransceiverType {
 	Pulse,

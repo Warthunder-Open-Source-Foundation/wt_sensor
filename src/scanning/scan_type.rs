@@ -1,5 +1,9 @@
 use std::str::FromStr;
+#[cfg(feature = "reflect")]
+use bevy_reflect::Reflect;
 
+
+#[cfg_attr(feature = "reflect", derive(bevy_reflect::Reflect, bevy_reflect::FromReflect))]
 #[derive(Debug)]
 pub enum Pattern {
 	Pyramide,

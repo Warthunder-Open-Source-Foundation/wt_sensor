@@ -1,5 +1,10 @@
 use std::ops::RangeInclusive;
 
+#[cfg(feature = "reflect")]
+use bevy_reflect::Reflect;
+
+
+#[cfg_attr(feature = "reflect", derive(bevy_reflect::Reflect, bevy_reflect::FromReflect))]
 #[derive(Debug)]
 pub struct Signal {
 	signal_type: SignalType,
@@ -16,6 +21,8 @@ pub struct Signal {
 	distance_accuracy: Option<f64>,
 }
 
+
+#[cfg_attr(feature = "reflect", derive(bevy_reflect::Reflect, bevy_reflect::FromReflect))]
 #[derive(Debug)]
 pub struct Distance {
 	presents: bool,
@@ -24,6 +31,8 @@ pub struct Distance {
 	width: f64,
 }
 
+
+#[cfg_attr(feature = "reflect", derive(bevy_reflect::Reflect, bevy_reflect::FromReflect))]
 #[derive(Debug)]
 pub struct DopplerSpeed {
 	presents: bool,
@@ -33,6 +42,9 @@ pub struct DopplerSpeed {
 	width: f64,
 }
 
+
+
+#[cfg_attr(feature = "reflect", derive(bevy_reflect::Reflect, bevy_reflect::FromReflect))]
 #[derive(Debug)]
 pub enum SignalType {
 	PulseSearch,

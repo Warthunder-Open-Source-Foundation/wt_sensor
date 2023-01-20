@@ -2,7 +2,11 @@ use std::str::FromStr;
 use wt_blk::WTBlk;
 use crate::scanning::scan_type::Pattern;
 use crate::util::Limits;
+#[cfg(feature = "reflect")]
+use bevy_reflect::Reflect;
 
+
+#[cfg_attr(feature = "reflect", derive(bevy_reflect::Reflect, bevy_reflect::FromReflect))]
 #[derive(Debug)]
 pub enum SubmodeCategory {
 	// Search
@@ -20,6 +24,7 @@ pub enum SubmodeCategory {
 	Track,
 }
 
+#[cfg_attr(feature = "reflect", derive(bevy_reflect::Reflect, bevy_reflect::FromReflect))]
 #[derive(Debug)]
 pub struct Submode {
 	pub pattern: Pattern,

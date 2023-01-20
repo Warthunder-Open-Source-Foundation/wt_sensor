@@ -11,6 +11,11 @@ use crate::scoped_range_sets::ScopeRangeSets;
 use crate::signals::Signal;
 use crate::transceiver::Transceiver;
 
+#[cfg(feature = "reflect")]
+use bevy_reflect::Reflect;
+
+
+#[cfg_attr(feature = "reflect", derive(bevy_reflect::Reflect))]
 #[derive(Debug)]
 pub struct Radar {
 	pub name: String,
