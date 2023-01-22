@@ -57,6 +57,27 @@ impl Radar {
 			Submode::from_value(&WTBlk::new(&elem.to_string()).unwrap(), name).unwrap()
 		}
 		).collect();
+		
+		let scope_range_sets = ScopeRangeSets {
+			common: {
+				let mut ranges = vec![];
+				let mut index = 1;
+				while let Ok(range) = blk.float(&format!("/scopeRangeSets/common/range{index}")) {
+					ranges.push(range);
+					index += 1;
+				}
+				ranges
+			},
+			boresight_lock: {
+				let mut ranges = vec![];
+				let mut index = 1;
+				while let Ok(range) = blk.float(&format!("/scopeRangeSets/boresightLock/range{index}")) {
+					ranges.push(range);
+					index += 1;
+				}
+				ranges
+			},
+		};
 
 
 		Self {
@@ -65,7 +86,7 @@ impl Radar {
 			transceivers,
 			submode: scan_patterns,
 			signals: vec![],
-			scope_range_sets: ScopeRangeSets { common: vec![], boresight_lock: vec![] },
+			scope_range_sets
 		}
 	}
 }
