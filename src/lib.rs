@@ -19,6 +19,7 @@ use bevy_reflect::Reflect;
 #[derive(Debug)]
 pub struct Radar {
 	pub name: String,
+	pub localized: String,
 	pub show_missile_launch_zone: bool,
 	pub transceivers: Vec<Transceiver>,
 	pub submode: Vec<Submode>,
@@ -30,6 +31,8 @@ pub struct Radar {
 impl Radar {
 	pub fn from_str(name: String, blk_str: &str) -> Self {
 		let blk = WTBlk::new(&blk_str).unwrap();
+
+		let localized = blk.str("/name").unwrap().to_owned();
 
 		let show_missile_launch_zone = blk.bool("/showMissileLaunchZone").unwrap();
 
@@ -82,6 +85,7 @@ impl Radar {
 
 		Self {
 			name,
+			localized,
 			show_missile_launch_zone,
 			transceivers,
 			submode: scan_patterns,
