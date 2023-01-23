@@ -47,7 +47,7 @@ impl Radar {
 		}).collect();
 
 
-		let scan_patterns = [
+		let submode = [
 			"searchNarrow",
 			"searchMedium",
 			"searchWide", "hudLock",
@@ -88,7 +88,7 @@ impl Radar {
 			localized,
 			show_missile_launch_zone,
 			transceivers,
-			submode: scan_patterns,
+			submode,
 			signals: vec![],
 			scope_range_sets
 		}
