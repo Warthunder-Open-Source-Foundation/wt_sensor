@@ -60,7 +60,7 @@ impl Transceiver {
 }
 
 #[cfg_attr(feature = "reflect", derive(bevy_reflect::Reflect, bevy_reflect::FromReflect))]
-#[derive(Debug)]
+#[derive(Debug, strum_macros::ToString)]
 pub enum TransceiverType {
 	Pulse,
 	PulseDoppler,
