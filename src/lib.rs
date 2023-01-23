@@ -54,10 +54,10 @@ impl Radar {
 			"verticalLock", "boresightLock",
 			"designationLock",
 			"track"
-		].iter().map(|name| {
-			let format = format!("/scanPatterns/{}", name);
+		].iter().map(|pattern_name| {
+			let format = format!("/scanPatterns/{}", pattern_name);
 			let elem = blk.pointer(&format).unwrap();
-			Submode::from_value(&WTBlk::new(&elem.to_string()).unwrap(), name).unwrap()
+			Submode::from_value(&WTBlk::new(&elem.to_string()).unwrap(), pattern_name).unwrap()
 		}
 		).collect();
 		
