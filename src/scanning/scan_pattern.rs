@@ -95,11 +95,11 @@ impl FromStr for SubmodeCategory {
 	fn from_str(s: &str) -> Result<Self, Self::Err> {
 		match s {
 			"searchNarrow" => Ok(Self::SearchNarrow),
-			"searchMedium" => Ok(Self::SearchNarrow),
-			"searchWide" => Ok(Self::SearchNarrow),
-			"hudLock" => Ok(Self::SearchNarrow),
-			"verticalLock" => Ok(Self::SearchNarrow),
-			"boresightLock" => Ok(Self::SearchNarrow),
+			"searchMedium" => Ok(Self::SearchMedium),
+			"searchWide" => Ok(Self::SearchWide),
+			"hudLock" => Ok(Self::HudLock),
+			"verticalLock" => Ok(Self::VerticalLock),
+			"boresightLock" => Ok(Self::BoresightLock),
 			"designationLock" => Ok(Self::DesignationLock),
 			"track" => Ok(Self::Track),
 			_ => Err(())
