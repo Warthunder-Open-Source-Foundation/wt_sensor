@@ -5,6 +5,7 @@ use serde_json::Value;
 
 #[cfg(feature = "reflect")]
 use bevy_reflect::Reflect;
+use crate::transceiver::TransceiverType::{Hprf, Mprf, Pulse, PulseDoppler};
 
 
 // Name is WIP
@@ -18,7 +19,7 @@ pub struct Transceiver {
 	rcs: f64,
 	range: f64,
 	range_max: f64,
-	time_gain_control: bool,
+	time_gain_control: Option<bool>,
 	antenna: Antenna,
 }
 
@@ -36,7 +37,7 @@ impl Transceiver {
 
 		let range_max = value.float("/rangeMax").ok()?;
 
-		let time_gain_control = value.bool("/timeGainControl").ok()?;
+		let time_gain_control = value.bool("/timeGainControl").ok();
 
 		let angle_half_sens = value.float("/antenna/angleHalfSens").ok()?;
 
@@ -64,6 +65,8 @@ impl Transceiver {
 pub enum TransceiverType {
 	Pulse,
 	PulseDoppler,
+	Hprf,
+	Mprf,
 }
 
 impl FromStr for TransceiverType {
@@ -71,8 +74,10 @@ impl FromStr for TransceiverType {
 
 	fn from_str(s: &str) -> Result<Self, Self::Err> {
 		match s {
-			"pulse" => Ok(TransceiverType::Pulse),
-			"pulseDoppler" => Ok(TransceiverType::PulseDoppler),
+			"pulse" => Ok(Pulse),
+			"pulseDoppler" => Ok(PulseDoppler),
+			"mprf" => Ok(Mprf),
+			"hprf" => Ok(Hprf),
 			_ => {
 				Err(())
 			}

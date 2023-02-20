@@ -36,15 +36,14 @@ impl Radar {
 
 		let show_missile_launch_zone = blk.bool("/showMissileLaunchZone").unwrap();
 
-		let transceivers = [
-			"pulse",
-			"pulseDoppler"
-		].iter().map(|name| {
-			// 								Yes they misspelled Transceiver's
-			let format = format!("/transivers/{}", name);
-			let elem = blk.pointer( &format).unwrap();
-			Transceiver::from_value(&WTBlk::new(&elem.to_string()).unwrap(), name).unwrap()
-		}).collect();
+		//													  they misspelled it
+		let transceiver_obj = blk.pointer("/transivers").expect("Except to have transceivers");
+		let mut transceivers = vec![];
+
+		for (k,v) in transceiver_obj.as_object().unwrap().iter() {
+			println!("{}", k);
+			transceivers.push(Transceiver::from_value(&WTBlk::new(&v.to_string()).unwrap(), k).unwrap())
+		}
 
 
 		let submode = [
@@ -104,6 +103,14 @@ mod test {
 	fn apg_66() {
 		let file = fs::read_to_string("us_an_apg_66.txt").unwrap();
 		let radar = Radar::from_str("an_apg_66".to_owned(), &file);
+
+		dbg!(radar);
+	}
+
+	#[test]
+	fn n_019() {
+		let file = fs::read_to_string("su_n_019.txt").unwrap();
+		let radar = Radar::from_str("n_019".to_owned(), &file);
 
 		dbg!(radar);
 	}
